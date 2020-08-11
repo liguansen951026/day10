@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.GoodsMapper">
+<select id="findPage" resultType="goodsVo" parameterType="goodsVo">
+	SELECT a.*,b.`typename` AS tname FROM `goods` a,`goodstype` b WHERE a.`typeid`=b.`id`
+	<if test="name!=null and name!=''">
+		and a.name like '%${name}%'
+	</if>
+	<if test="typeid!=null and typeid!=0">
+		and typeid=#{typeid}
+	</if>
+	<if test="createtime1!=null and createtime1!=''">
+		and a.createtime &gt;= #{createtime1}
+	</if>
+	<if test="createtime2!=null and createtime2!=''">
+		and a.createtime &lt;= #{createtime2}
+	</if>
+</select>
+<select id="countGoods" resultType="goodsVo">
+	SELECT a.`typename` as tname,COUNT(b.`id`) as num FROM `goodstype` a LEFT JOIN `goods` b ON a.`id`=b.`typeid` GROUP BY a.`typename`
+</select>
+</mapper>
